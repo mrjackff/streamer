@@ -1,28 +1,4 @@
-<?php
-if (isset($_POST['button'])){
 
-    $url = 'http://localhost:8080/panel/';
-    $data = array('button' => $_POST['button']);
-
-    $options = array(
-        'http' => array(
-            'header' => "Content-type: application/x-www-form-unrlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($data)
-        ),
-
-    );
-    $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-    if ($result === FALSE){
-        echo "sorry maybe your svchost is not runing | this reason your button can't be trigger";
-    }
-    else
-    {
-        echo "Function Successfully Trigger!| wait for applying";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,6 +111,30 @@ if (isset($_POST['button'])){
         </div>
     </div>
 
-    
+    <?php
+if (isset($_POST['button'])){
+
+    $url = 'http://localhost:8080/panel/';
+    $data = array('button' => $_POST['button']);
+
+    $options = array(
+        'http' => array(
+            'header' => "Content-type: application/x-www-form-unrlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        ),
+
+    );
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    if ($result === FALSE){
+        echo "sorry maybe your svchost is not runing | this reason your button can't be trigger";
+    }
+    else
+    {
+        echo "Function Successfully Trigger!| wait for applying";
+    }
+}
+?>
 </body>
 </html>
